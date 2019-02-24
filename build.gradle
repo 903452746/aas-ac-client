@@ -1,0 +1,50 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.16.RELEASE'
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            credentials {
+                username = "${NEXUS_USER}"
+                password = "${NEXUS_PASSWORD}"
+            }
+            url "http://oss.apexsoft.com.cn/repository/maven-public/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+//apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+group = 'com.apexsoft'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    maven {
+        credentials {
+            username = "${NEXUS_USER}"
+            password = "${NEXUS_PASSWORD}"
+        }
+        url "http://oss.apexsoft.com.cn/repository/maven-public/"
+    }
+}
+
+configurations.all {
+    //每隔24小时检查远程依赖是否存在更新
+    //resolutionStrategy.cacheChangingModulesFor 24, 'hours'
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile "com.apexsoft:aas-ac-client:1.0.0-SNAPSHOT"
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
